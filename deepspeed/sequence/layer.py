@@ -154,6 +154,8 @@ def single_all_to_all(input, scatter_idx, gather_idx, batch_dim_idx, group, asyn
     seq_world_size = dist.get_world_size(group)
     # we only need num_heads once
     num_heads = input.shape[2]
+    if scatter_idx < 2:
+        num_heads = seq_world_size * num_heads
 
     if get_num_kv_heads() is not None or num_heads % seq_world_size != 0:
         # Assuming here that the number of heads for q is consistent with kv
